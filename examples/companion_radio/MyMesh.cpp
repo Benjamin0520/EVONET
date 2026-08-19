@@ -296,7 +296,12 @@ void MyMesh::logRxRaw(float snr, float rssi, const uint8_t raw[], int len) {
 bool MyMesh::isAutoAddEnabled() const {
   return (_prefs.manual_add_contacts & 1) == 0;
 }
-
+void MyMesh::logRx(mesh::Packet* packet, int len, float score) {
+#ifdef PIN_RX_LED
+  _rx_led_state = !_rx_led_state;
+  digitalWrite(PIN_RX_LED, _rx_led_state);
+#endif
+}
 bool MyMesh::shouldAutoAddContactType(uint8_t contact_type) const {
   if ((_prefs.manual_add_contacts & 1) == 0) {
     return true;

@@ -10,6 +10,10 @@ void HeltecV4Board::begin() {
     loRaFEMControl.init();
 
     periph_power.begin();
+    #ifdef PIN_RX_LED
+    pinMode(PIN_RX_LED, OUTPUT);
+    digitalWrite(PIN_RX_LED, LOW);
+    #endif
     esp_reset_reason_t reason = esp_reset_reason();
     if (reason == ESP_RST_DEEPSLEEP) {
       long wakeup_source = esp_sleep_get_ext1_wakeup_status();
@@ -23,12 +27,10 @@ void HeltecV4Board::begin() {
   }
 
   void HeltecV4Board::onBeforeTransmit(void) {
-    digitalWrite(P_LORA_TX_LED, HIGH);   // turn TX LED on
     loRaFEMControl.setTxModeEnable();
   }
 
   void HeltecV4Board::onAfterTransmit(void) {
-    digitalWrite(P_LORA_TX_LED, LOW);   // turn TX LED off
     loRaFEMControl.setRxModeEnable();
   }
 
